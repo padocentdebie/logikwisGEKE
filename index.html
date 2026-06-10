@@ -11,7 +11,7 @@
         li { margin-bottom: 10px; }
         
         .grid-wrapper { overflow-x: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        table { border-collapse: collapse; margin-top: 20px; }
+        table { border-collapse: collapse; margin-top: 20px; margin-bottom: 25px; }
         td, th { border: 1px solid #718096; width: 55px; height: 55px; text-align: center; position: relative; vertical-align: middle; }
         
         /* Blokgrenzen dikker maken voor de sub-matrices */
@@ -32,6 +32,10 @@
         .clear-btn:hover { color: #e53e3e; font-weight: bold; }
 
         #win-msg { display: none; background: #c6f6d5; color: #22543d; padding: 18px; border-radius: 8px; margin-bottom: 25px; font-weight: bold; text-align: center; font-size: 1.2em; border: 2px solid #38a169; }
+        
+        .btn-container { text-align: center; margin-top: 20px; }
+        .reset-btn { background-color: #e53e3e; color: white; border: none; padding: 12px 24px; font-size: 1em; font-weight: bold; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .reset-btn:hover { background-color: #c53030; }
     </style>
 </head>
 <body>
@@ -45,12 +49,12 @@
     <div class="clues">
         <h3>Dossier-aanwijzingen (PV Biethe)</h3>
         <ul>
-            <li>De jongen die verantwoordelijk was voor de <strong>Mishandeling</strong> had via WhatsApp contact met Geke tot zondagavond.</li>
-            <li>Het misdrijf dat gepleegd werd vanwege het <strong>Achterstallige geld (€170,-)</strong> is direct gelinkt aan het <strong>Dashcam-filmpje</strong>.</li>
+            <li>De jongen die verantwoordelijk was voor de <strong>Mishandeling</strong> had via de <strong>WhatsApp-chat</strong> contact met Geke tot zondagavond.</li>
+            <li>Het misdrijf dat gepleegd werd vanwege het <strong>Achterstallige geld (€170,-)</strong> is direct gelinkt aan de <strong>Dashcam-film</strong>.</li>
             <li>Verdachte <strong>Anass</strong> is <em>niet</em> de jongen die de ruit vernielde met de <strong>Baksteen</strong>, en hij heeft niks te maken met het drugsmotief.</li>
-            <li>Het delict waarbij getracht werd de meisjes in de <strong>Auto te trekken</strong>, werd ontdekt toen Frederika <strong>Vapes & Lange vloei</strong> vond op de kamer van Geke.</li>
+            <li>Het delict waarbij getracht werd de meisjes in de <strong>Auto te trekken</strong>, werd ontdekt toen Frederika <strong>Vapes & Vloei</strong> vond op de kamer van Geke.</li>
             <li>Verdachte <strong>Brahim</strong> eiste de <strong>Achterstallige €170,-</strong> op, maar hij was <em>niet</em> degene die de meiden in de auto probeerde te sleuren.</li>
-            <li>Verdachte <strong>Casper</strong> heeft volgens het onderzoek via WhatsApp gecommuniceerd, maar is niet gelinkt aan het drugsmotief.</li>
+            <li>Verdachte <strong>Casper</strong> heeft volgens het onderzoek via de <strong>WhatsApp-chat</strong> gecommuniceerd, maar is niet gelinkt aan het drugsmotief.</li>
         </ul>
     </div>
 
@@ -66,7 +70,7 @@
                     <th class="col-header"><span>Drugsgebruik</span></th>
                     <th class="col-header block-boundary"><span>Wapens-check</span></th>
                     <th class="col-header"><span>Dashcam-film</span></th>
-                    <th class="col-header"><span>Lachgasfles</span></th>
+                    <th class="col-header"><span>WhatsApp-chat</span></th>
                     <th class="col-header"><span>Vapes & Vloei</span></th>
                 </tr>
             </thead>
@@ -81,7 +85,7 @@
                     <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="WhatsApp-chat" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                 </tr>
                 <!-- RIJ 2: BRAHIM -->
@@ -94,7 +98,7 @@
                     <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="WhatsApp-chat" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                 </tr>
                 <!-- RIJ 3: CASPER -->
@@ -107,7 +111,7 @@
                     <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="WhatsApp-chat" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                 </tr>
                 <!-- RIJ 4: DASHCAM -->
@@ -121,9 +125,9 @@
                     <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
                 </tr>
-                <!-- RIJ 5: LACHGASFLES -->
-                <tr data-row="Lachgasfles">
-                    <td class="row-header">Lachgasfles</td>
+                <!-- RIJ 5: WHATSAPP-CHAT -->
+                <tr data-row="WhatsApp-chat">
+                    <td class="row-header">WhatsApp-chat</td>
                     <td class="cell" data-col="Auto-trekken" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell" data-col="Mishandeling" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
                     <td class="cell block-boundary" data-col="Baksteen" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
@@ -169,17 +173,21 @@
                 </tr>
             </tbody>
         </table>
+
+        <div class="btn-container">
+            <button class="reset-btn" onclick="resetPuzzle()">Wis Volledige Puzzel</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // Sluitende controleoplossing (exact 18 juiste matches over de sub-grids)
+    // Sluitende controleoplossing met WhatsApp-chat verwerkt
     const solution = {
-        "Anass": ["Mishandeling", "Wapens-check", "Lachgasfles"],
+        "Anass": ["Mishandeling", "Wapens-check", "WhatsApp-chat"],
         "Brahim": ["Baksteen", "Achterstallig", "Dashcam-film"],
         "Casper": ["Auto-trekken", "Drugsgebruik", "Vapes & Vloei"],
         "Dashcam-film": ["Baksteen", "Achterstallig"],
-        "Lachgasfles": ["Mishandeling", "Wapens-check"],
+        "WhatsApp-chat": ["Mishandeling", "Wapens-check"],
         "Vapes & Vloei": ["Auto-trekken", "Drugsgebruik"],
         "Achterstallig": ["Baksteen"],
         "Drugsgebruik": ["Auto-trekken"],
@@ -189,7 +197,6 @@
     function cycleState(cell) {
         const contentSpan = cell.querySelector('.content');
         
-        // Staatwisseling: Leeg -> X -> V -> Leeg
         if (!cell.classList.contains('state-X') && !cell.classList.contains('state-V')) {
             cell.classList.add('state-X');
             contentSpan.innerText = 'X';
@@ -197,7 +204,7 @@
             cell.classList.remove('state-X');
             cell.classList.add('state-V');
             contentSpan.innerText = 'V';
-            autoCross(cell); // Direct uitsluiten van overige opties!
+            autoCross(cell);
         } else {
             cell.classList.remove('state-V');
             contentSpan.innerText = '';
@@ -206,7 +213,7 @@
     }
 
     function clearCell(event, btn) {
-        event.stopPropagation(); // Voorkomt dat cycleState afvuurt
+        event.stopPropagation();
         const cell = btn.parentElement;
         cell.classList.remove('state-X', 'state-V');
         cell.querySelector('.content').innerText = '';
@@ -221,9 +228,7 @@
 
         const allCells = document.querySelectorAll('.cell');
         allCells.forEach(c => {
-            // Check of de cel in dezelfde sub-matrix (groepcombinatie) valt
             if (c !== vinkjeCell && c.dataset.rgroup === rgroup && c.dataset.cgroup === cgroup) {
-                // Als het in dezelfde rij óf dezelfde kolom zit, zet een X
                 if (c.parentElement.dataset.row === rowName || c.dataset.col === colName) {
                     if (!c.classList.contains('state-V')) {
                         c.classList.remove('state-X');
@@ -233,6 +238,17 @@
                 }
             }
         });
+    }
+
+    function resetPuzzle() {
+        if (confirm("Weet je zeker dat je de hele puzzel wilt wissen?")) {
+            const allCells = document.querySelectorAll('.cell');
+            allCells.forEach(cell => {
+                cell.classList.remove('state-X', 'state-V');
+                cell.querySelector('.content').innerText = '';
+            });
+            document.getElementById('win-msg').style.display = 'none';
+        }
     }
 
     function checkWin() {
@@ -253,7 +269,6 @@
             }
         });
 
-        // In een 3x3 logigram met 3 subgrids zijn er exact 18 vinkjes nodig voor de winst
         if (correctVinkjes === 18 && falseVinkjes === 0) {
             document.getElementById('win-msg').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
