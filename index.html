@@ -2,260 +2,45 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactieve Politie Logikwis: De Zaak Geke (★★★☆☆)</title>
+    <title>Geke's Dossier: Logikwis (★★★☆☆)</title>
     <style>
-        :root {
-            --bg-color: #f0f4f8;
-            --text-color: #1a202c;
-            --border-color: #718096;
-            --grid-bg: #ffffff;
-            --highlight-bg: #e2e8f0;
-            --cross-color: #e53e3e;
-            --check-color: #38a169;
-            --card-bg: #ffffff;
-            --card-border: #cbd5e0;
-        }
+        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .clues { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        ul { margin: 0; padding-left: 20px; line-height: 1.6; }
+        li { margin-bottom: 8px; }
+        
+        table { border-collapse: collapse; margin-top: 20px; background: white; }
+        td, th { border: 1px solid #999; width: 50px; height: 50px; text-align: center; position: relative; }
+        
+        .row-header { width: 150px; text-align: right; padding-right: 10px; font-weight: bold; background: #eee; }
+        .col-header { height: 120px; vertical-align: bottom; }
+        .col-header span { transform: rotate(-45deg); display: block; width: 50px; transform-origin: left bottom; margin-left: 20px; font-weight: bold; }
+        
+        .cell { cursor: pointer; font-weight: bold; font-size: 1.2em; }
+        .state-X { color: red; }
+        .state-V { color: green; background: #e6ffe6; }
+        
+        .clear-btn { display: none; position: absolute; top: 0; right: 2px; font-size: 10px; color: #aaa; cursor: pointer; }
+        .cell:hover .clear-btn { display: block; }
+        .clear-btn:hover { color: red; }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 30px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            color: #2c5282;
-            margin-top: 0;
-            margin-bottom: 5px;
-            font-size: 2em;
-            text-align: center;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #4a5568;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1050px;
-            width: 100%;
-        }
-
-        .content-box {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .content-box h2 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            font-size: 1.25em;
-            color: #2b6cb0;
-            border-bottom: 2px solid #ebf8ff;
-            padding-bottom: 8px;
-        }
-
-        .clues-list {
-            margin: 0;
-            padding-left: 20px;
-            line-height: 1.6;
-        }
-
-        .clues-list li {
-            margin-bottom: 12px;
-        }
-
-        #winMessage {
-            display: none;
-            background-color: #c6f6d5;
-            border: 2px solid #38a169;
-            color: #22543d;
-            padding: 18px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.3em;
-            animation: popIn 0.5s ease-out;
-            box-shadow: 0 4px 10px rgba(56, 161, 105, 0.2);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.95); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .grid-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .grid-wrapper {
-            overflow-x: auto;
-            max-width: 100%;
-            padding-top: 110px;
-            padding-left: 130px;
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        table {
-            border-collapse: collapse;
-            background-color: var(--grid-bg);
-        }
-
-        td, th {
-            border: 1px solid var(--border-color);
-            width: 44px;
-            height: 44px;
-            text-align: center;
-            vertical-align: middle;
-            padding: 0;
-            position: relative;
-        }
-
-        tr.block-boundary th, tr.block-boundary td {
-            border-bottom: 3px solid #2d3748;
-        }
-        th.block-boundary, td.block-boundary {
-            border-right: 3px solid #2d3748;
-        }
-
-        .row-header {
-            width: 130px;
-            text-align: right;
-            padding-right: 12px;
-            font-weight: bold;
-            font-size: 0.85em;
-            background-color: #f7fafc;
-            border: 1px solid var(--border-color);
-        }
-
-        .col-header {
-            height: 110px;
-            position: relative;
-            vertical-align: bottom;
-            border: none;
-        }
-
-        .col-header span {
-            transform: rotate(-45deg);
-            transform-origin: left bottom;
-            position: absolute;
-            bottom: 5px;
-            left: 20px;
-            display: inline-block;
-            width: 130px;
-            text-align: left;
-            font-weight: bold;
-            font-size: 0.85em;
-            white-space: nowrap;
-        }
-
-        .cell {
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.3em;
-            user-select: none;
-            transition: background-color 0.1s;
-        }
-
-        .cell:hover {
-            background-color: var(--highlight-bg);
-        }
-
-        .cell-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-        }
-
-        .cell.state-X .cell-text {
-            color: var(--cross-color);
-        }
-
-        .cell.state-V {
-            background-color: #c6f6d5;
-        }
-        .cell.state-V .cell-text {
-            color: var(--check-color);
-        }
-
-        .delete-btn {
-            display: none;
-            position: absolute;
-            top: 2px;
-            right: 2px;
-            width: 12px;
-            height: 12px;
-            background-color: #e53e3e;
-            color: white;
-            font-size: 9px;
-            line-height: 11px;
-            text-align: center;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        .cell.state-X:hover .delete-btn,
-        .cell.state-V:hover .delete-btn {
-            display: block;
-        }
-
-        .delete-btn:hover {
-            background-color: #c53030;
-            transform: scale(1.1);
-        }
-
-        .btn-reset {
-            background-color: #2b6cb0;
-            color: white;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1em;
-            transition: background-color 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .btn-reset:hover {
-            background-color: #2c5282;
-        }
+        #win-msg { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Recherche-dossier: De Incidenten rondom Geke</h1>
-    <div class="subtitle">Moeilijkheidsgraad: ★★★☆☆ (3x3 Matrix)</div>
-    
-    <div id="winMessage">🚨 Zaak Opgelost! De verklaringen zijn geverifieerd, de motieven kloppen en de verdachten zijn gelinkt! Uitstekend recherchewerk! 🕵️‍♂️</div>
+    <p><strong>Moeilijkheidsgraad:</strong> ★★★☆☆</p>
 
-    <div class="content-box">
-        <h2>Dossier-aanwijzingen (Gebaseerd op PV Biethe)</h2>
-        <ul class="clues-list">
-            <li>De jongen die verantwoordelijk was voor de <strong>Mishandeling</strong> van de vriendin had via WhatsApp contact met Geke tot zondagavond.</li>
-            <li>Het misdrijf dat gepleegd werd vanwege de <strong>Achterstallige €170,-</strong> is gelinkt aan het bewijsstuk van het <strong>Dashcam-filmpje</strong> (dat Frederika aan de politie gaf).</li>
+    <div id="win-msg">🚨 Zaak Opgelost! Alle verdachten zijn correct gekoppeld aan de delicten en het bewijs!</div>
+
+    <div class="clues">
+        <h3>Dossier-aanwijzingen (PV Biethe)</h3>
+        <ul>
+            <li>De jongen die verantwoordelijk was voor de <strong>Mishandeling</strong> had via WhatsApp contact met Geke tot zondagavond.</li>
+            <li>Het misdrijf dat gepleegd werd vanwege het <strong>Achterstallige geld van €170,-</strong> is direct gelinkt aan het <strong>Dashcam-filmpje</strong>.</li>
             <li>Verdachte <strong>Anass</strong> is <em>niet</em> de jongen die de ruit vernielde met de <strong>Baksteen</strong>, en hij heeft niks te maken met het drugsmotief.</li>
             <li>Het delict waarbij getracht werd de meisjes in de <strong>Auto te trekken</strong>, werd ontdekt toen Frederika <strong>Vapes & Lange vloei</strong> vond op de kamer van Geke.</li>
             <li>Verdachte <strong>Brahim</strong> eiste de <strong>Achterstallige €170,-</strong> op, maar hij was <em>niet</em> degene die de meiden in de auto probeerde te sleuren.</li>
@@ -263,218 +48,150 @@
         </ul>
     </div>
 
-    <div class="content-box grid-container">
-        <h2>Het Recherche-matrix</h2>
-        <div class="grid-wrapper">
-            <table id="logicGrid">
-                <thead>
-                    <tr>
-                        <th style="border:none; background:none;"></th>
-                        <th class="col-header"><span>Auto-trekken</span></th>
-                        <th class="col-header"><span>Mishandeling</span></th>
-                        <th class="col-header block-boundary"><span>Baksteen (Ruit)</span></th>
-                        <th class="col-header"><span>Achterstallig geld</span></th>
-                        <th class="col-header"><span>Drugsgebruik</span></th>
-                        <th class="col-header block-boundary"><span>Wapens controleren</span></th>
-                        <th class="col-header"><span>Dashcam-film</span></th>
-                        <th class="col-header"><span>Lachgasfles</span></th>
-                        <th class="col-header"><span>Vapes & Vloei</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="row-header">Anass</td>
-                        <td class="cell" data-row="Anass" data-col="Auto-trekken" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Mishandeling" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Anass" data-col="Baksteen" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Achterstallig geld" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Drugsgebruik" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Anass" data-col="Wapens controleren" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Dashcam-film" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Lachgasfles" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Anass" data-col="Vapes & Vloei" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                    </tr>
-                    <tr>
-                        <td class="row-header">Brahim</td>
-                        <td class="cell" data-row="Brahim" data-col="Auto-trekken" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Mishandeling" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Brahim" data-col="Baksteen" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Achterstallig geld" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Drugsgebruik" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Brahim" data-col="Wapens controleren" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Dashcam-film" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Lachgasfles" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Brahim" data-col="Vapes & Vloei" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                    </tr>
-                    <tr class="block-boundary">
-                        <td class="row-header">Casper</td>
-                        <td class="cell" data-row="Casper" data-col="Auto-trekken" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Mishandeling" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Casper" data-col="Baksteen" data-rowgroup="verdachten" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Achterstallig geld" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Drugsgebruik" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Casper" data-col="Wapens controleren" data-rowgroup="verdachten" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Dashcam-film" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Lachgasfles" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Casper" data-col="Vapes & Vloei" data-rowgroup="verdachten" data-colgroup="bewijs" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                    </tr>
-
-                    <tr>
-                        <td class="row-header">Dashcam-film</td>
-                        <td class="cell" data-row="Dashcam-film" data-col="Auto-trekken" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Dashcam-film" data-col="Mishandeling" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Dashcam-film" data-col="Baksteen" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Dashcam-film" data-col="Achterstallig geld" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Dashcam-film" data-col="Drugsgebruik" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Dashcam-film" data-col="Wapens controleren" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-                    <tr>
-                        <td class="row-header">Lachgasfles</td>
-                        <td class="cell" data-row="Lachgasfles" data-col="Auto-trekken" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Lachgasfles" data-col="Mishandeling" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Lachgasfles" data-col="Baksteen" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Lachgasfles" data-col="Achterstallig geld" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Lachgasfles" data-col="Drugsgebruik" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Lachgasfles" data-col="Wapens controleren" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-                    <tr class="block-boundary">
-                        <td class="row-header">Vapes & Vloei</td>
-                        <td class="cell" data-row="Vapes & Vloei" data-col="Auto-trekken" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Vapes & Vloei" data-col="Mishandeling" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Vapes & Vloei" data-col="Baksteen" data-rowgroup="bewijs" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Vapes & Vloei" data-col="Achterstallig geld" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Vapes & Vloei" data-col="Drugsgebruik" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Vapes & Vloei" data-col="Wapens controleren" data-rowgroup="bewijs" data-colgroup="motieven" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-
-                    <tr>
-                        <td class="row-header">Achterstallig geld</td>
-                        <td class="cell" data-row="Achterstallig geld" data-col="Auto-trekken" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Achterstallig geld" data-col="Mishandeling" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Achterstallig geld" data-col="Baksteen" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-                    <tr>
-                        <td class="row-header">Drugsgebruik</td>
-                        <td class="cell" data-row="Drugsgebruik" data-col="Auto-trekken" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Drugsgebruik" data-col="Mishandeling" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Drugsgebruik" data-col="Baksteen" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-                    <tr class="block-boundary">
-                        <td class="row-header">Wapens controleren</td>
-                        <td class="cell" data-row="Wapens controleren" data-col="Auto-trekken" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell" data-row="Wapens controleren" data-col="Mishandeling" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td class="cell block-boundary" data-row="Wapens controleren" data-col="Baksteen" data-rowgroup="motieven" data-colgroup="delicten" onclick="cycleState(this)"><div class="delete-btn" onclick="clearCell(event, this)">×</div><div class="cell-text"></div></td>
-                        <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <button class="btn-reset" onclick="resetGrid()">Dossier Wissen (Reset)</button>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th class="col-header"><span>Auto-trekken</span></th>
+                <th class="col-header"><span>Mishandeling</span></th>
+                <th class="col-header"><span>Baksteen</span></th>
+                <th class="col-header"><span>Dashcam-film</span></th>
+                <th class="col-header"><span>Lachgasfles</span></th>
+                <th class="col-header"><span>Vapes & Vloei</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-rechercheur="Anass">
+                <td class="row-header">Anass</td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+            </tr>
+            <tr data-rechercheur="Brahim">
+                <td class="row-header">Brahim</td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+            </tr>
+            <tr data-rechercheur="Casper">
+                <td class="row-header">Casper</td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
 <script>
-    // Harde oplossing voor validatie
+    // De juiste combinaties op basis van de logica
     const solution = {
-        "Anass": ["Mishandeling", "Wapens controleren", "Lachgasfles"],
-        "Brahim": ["Baksteen", "Achterstallig geld", "Dashcam-film"],
-        "Casper": ["Auto-trekken", "Drugsgebruik", "Vapes & Vloei"],
-        "Dashcam-film": ["Baksteen", "Achterstallig geld"],
-        "Lachgasfles": ["Mishandeling", "Wapens controleren"],
-        "Vapes & Vloei": ["Auto-trekken", "Drugsgebruik"],
-        "Achterstallig geld": ["Baksteen"],
-        "Drugsgebruik": ["Auto-trekken"],
-        "Wapens controleren": ["Mishandeling"]
+        "Anass": ["Mishandeling", "Lachgasfles"],
+        "Brahim": ["Baksteen", "Dashcam-film"],
+        "Casper": ["Auto-trekken", "Vapes & Vloei"]
     };
 
     function cycleState(cell) {
-        if (cell.classList.contains('state-V') || cell.classList.contains('state-X')) return;
+        // Alleen doorklikken als de cel nog niet vergrendeld is door autoCross
+        if (cell.classList.contains('locked')) return;
+
+        const contentSpan = cell.querySelector('.content');
         
-        // Vraag gebruiker subtiel of klik direct (Klik 1 = X, Klik 2 = V)
-        // We implementeren cycle: leeg -> X -> V -> leeg
-        let textDiv = cell.querySelector('.cell-text');
-        if (!cell.dataset.state || cell.dataset.state === 'none') {
-            cell.dataset.state = 'X';
+        if (!cell.classList.contains('state-X') && !cell.classList.contains('state-V')) {
+            // Staat: Leeg -> Wordt X
             cell.classList.add('state-X');
-            textDiv.innerText = 'X';
-        } else if (cell.dataset.state === 'X') {
+            contentSpan.innerText = 'X';
+        } else if (cell.classList.contains('state-X')) {
+            // Staat: X -> Wordt V
             cell.classList.remove('state-X');
-            cell.dataset.state = 'V';
             cell.classList.add('state-V');
-            textDiv.innerText = '✓';
-            autoCross(cell);
+            contentSpan.innerText = 'V';
+            autoCross(cell); // Kruis de rest van de opties direct af!
+        } else if (cell.classList.contains('state-V')) {
+            // Staat: V -> Wordt weer leeg
+            cell.classList.remove('state-V');
+            contentSpan.innerText = '';
         }
-        checkWinCondition();
+        checkWin();
     }
 
     function clearCell(event, btn) {
-        event.stopPropagation(); // Voorkom dat cycleState triggert
-        let cell = btn.parentElement;
-        cell.classList.remove('state-X', 'state-V');
-        cell.dataset.state = 'none';
-        cell.querySelector('.cell-text').innerText = '';
-        checkWinCondition();
+        event.stopPropagation(); // Voorkom dat cycleState tegelijk triggert
+        const cell = btn.parentElement;
+        cell.className = 'cell'; // Reset alle classes behalve basissubstantiëring
+        cell.querySelector('.content').innerText = '';
+        checkWin();
     }
 
-    function autoCross(cell) {
-        // Handige hulp: als je een vinkje zet, zet deze functie direct X'en in de rest van de rij/kolom sectie
-        let row = cell.dataset.row;
-        let col = cell.dataset.col;
-        let rowgroup = cell.dataset.rowgroup;
-        let colgroup = cell.dataset.colgroup;
-        
-        let allCells = document.querySelectorAll('.cell');
-        allCells.forEach(c => {
-            if (c !== cell && c.dataset.rowgroup === rowgroup && c.dataset.colgroup === colgroup) {
-                if (c.dataset.row === row || c.dataset.col === col) {
-                    if (!c.dataset.state || c.dataset.state === 'none') {
-                        c.dataset.state = 'X';
-                        c.classList.add('state-X');
-                        c.querySelector('.cell-text').innerText = 'X';
+    function autoCross(vinkjeCell) {
+        const row = vinkjeCell.parentElement;
+        const colIndex = vinkjeCell.cellIndex;
+        const table = row.parentElement;
+
+        // Bepaal in welk 'blok' we zitten (0-2 zijn delicten, 3-5 is bewijsmateriaal)
+        const isDelictBlok = colIndex <= 3;
+        const startCol = isDelictBlok ? 1 : 4;
+        const endCol = isDelictBlok ? 3 : 6;
+
+        // 1. Kruis overige cellen in dezelfde RIJ af (binnen het juiste sub-blok)
+        for (let i = startCol; i <= endCol; i++) {
+            const currentCell = row.cells[i];
+            if (currentCell !== vinkjeCell && !currentCell.classList.contains('state-V')) {
+                currentCell.className = 'cell state-X locked';
+                currentCell.querySelector('.content').innerText = 'X';
+            }
+        }
+
+        // 2. Kruis overige cellen in dezelfde KOLOM af
+        const allRows = table.querySelectorAll('tr');
+        allRows.forEach(r => {
+            const currentCell = r.cells[colIndex];
+            if (currentCell && currentCell !== vinkjeCell && !currentCell.classList.contains('state-V')) {
+                currentCell.className = 'cell state-X locked';
+                currentCell.querySelector('.content').innerText = 'X';
+            }
+        });
+    }
+
+    function checkWin() {
+        let correctVinkjes = 0;
+        const rows = document.querySelectorAll('tbody tr');
+
+        rows.forEach(row => {
+            const naam = row.getAttribute('data-rechercheur');
+            const targets = solution[naam];
+
+            for (let i = 1; i < row.cells.length; i++) {
+                const cell = row.cells[i];
+                const headerText = document.querySelector(`thead th:nth-child(${i + 1}) span`).innerText;
+                
+                if (cell.classList.contains('state-V')) {
+                    if (targets.includes(headerText)) {
+                        correctVinkjes++;
+                    } else {
+                        // Fout vinkje gezet
+                        document.getElementById('win-msg').style.display = 'none';
+                        return;
                     }
                 }
             }
         });
-    }
 
-    function checkWinCondition() {
-        let allCorrect = true;
-        let vinksCount = 0;
-        
-        let allCells = document.querySelectorAll('.cell');
-        allCells.forEach(cell => {
-            let row = cell.dataset.row;
-            let col = cell.dataset.col;
-            if (cell.dataset.state === 'V') {
-                vinksCount++;
-                if (!solution[row] || !solution[row].includes(col)) {
-                    allCorrect = false;
-                }
-            }
-        });
-
-        // Er zijn in totaal 18 juiste 'vinkjes' te zetten over de sub-matrices
-        if (allCorrect && vinksCount === 18) {
-            document.getElementById('winMessage').style.display = 'block';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Er moeten in totaal 6 juiste vinkjes staan (2 per verdachte)
+        if (correctVinkjes === 6) {
+            document.getElementById('win-msg').style.display = 'block';
         } else {
-            document.getElementById('winMessage').style.display = 'none';
+            document.getElementById('win-msg').style.display = 'none';
         }
-    }
-
-    function resetGrid() {
-        let allCells = document.querySelectorAll('.cell');
-        allCells.forEach(cell => {
-            cell.classList.remove('state-X', 'state-V');
-            cell.dataset.state = 'none';
-            cell.querySelector('.cell-text').innerText = '';
-        });
-        document.getElementById('winMessage').style.display = 'none';
     }
 </script>
 
