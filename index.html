@@ -2,45 +2,51 @@
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
-    <title>Geke's Dossier: Logikwis (★★★☆☆)</title>
+    <title>Logikwis: Dossier Geke (★★★☆☆)</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f9; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .clues { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        body { font-family: sans-serif; background: #f0f4f8; padding: 20px; color: #1a202c; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .clues { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 25px; }
         ul { margin: 0; padding-left: 20px; line-height: 1.6; }
-        li { margin-bottom: 8px; }
+        li { margin-bottom: 10px; }
         
-        table { border-collapse: collapse; margin-top: 20px; background: white; }
-        td, th { border: 1px solid #999; width: 50px; height: 50px; text-align: center; position: relative; }
+        .grid-wrapper { overflow-x: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        table { border-collapse: collapse; margin-top: 20px; }
+        td, th { border: 1px solid #718096; width: 55px; height: 55px; text-align: center; position: relative; vertical-align: middle; }
         
-        .row-header { width: 150px; text-align: right; padding-right: 10px; font-weight: bold; background: #eee; }
-        .col-header { height: 120px; vertical-align: bottom; }
-        .col-header span { transform: rotate(-45deg); display: block; width: 50px; transform-origin: left bottom; margin-left: 20px; font-weight: bold; }
+        /* Blokgrenzen dikker maken voor de sub-matrices */
+        tr.block-boundary th, tr.block-boundary td { border-bottom: 3px solid #2d3748; }
+        th.block-boundary, td.block-boundary { border-right: 3px solid #2d3748; }
         
-        .cell { cursor: pointer; font-weight: bold; font-size: 1.2em; }
-        .state-X { color: red; }
-        .state-V { color: green; background: #e6ffe6; }
+        .row-header { width: 140px; text-align: right; padding-right: 12px; font-weight: bold; background: #f7fafc; }
+        .col-header { height: 120px; vertical-align: bottom; border: none; }
+        .col-header span { transform: rotate(-45deg); display: block; width: 55px; transform-origin: left bottom; margin-left: 25px; font-weight: bold; white-space: nowrap; }
         
-        .clear-btn { display: none; position: absolute; top: 0; right: 2px; font-size: 10px; color: #aaa; cursor: pointer; }
+        .cell { cursor: pointer; font-weight: bold; font-size: 1.4em; user-select: none; }
+        .cell:hover { background: #edf2f7; }
+        .state-X { color: #e53e3e; }
+        .state-V { color: #38a169; background: #c6f6d5 !important; }
+        
+        .clear-btn { display: none; position: absolute; top: 2px; right: 4px; font-size: 11px; color: #a0aec0; cursor: pointer; font-weight: normal; }
         .cell:hover .clear-btn { display: block; }
-        .clear-btn:hover { color: red; }
+        .clear-btn:hover { color: #e53e3e; font-weight: bold; }
 
-        #win-msg { display: none; background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 20px; font-weight: bold; text-align: center; }
+        #win-msg { display: none; background: #c6f6d5; color: #22543d; padding: 18px; border-radius: 8px; margin-bottom: 25px; font-weight: bold; text-align: center; font-size: 1.2em; border: 2px solid #38a169; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>Recherche-dossier: De Incidenten rondom Geke</h1>
-    <p><strong>Moeilijkheidsgraad:</strong> ★★★☆☆</p>
+    <p><strong>Moeilijkheidsgraad:</strong> ★★★☆☆ (Volledige 3x3 Matrix)</p>
 
-    <div id="win-msg">🚨 Zaak Opgelost! Alle verdachten zijn correct gekoppeld aan de delicten en het bewijs!</div>
+    <div id="win-msg">🚨 Zaak Opgelost! Alle bewijsstukken, motieven en delicten sluiten naadloos op elkaar aan!</div>
 
     <div class="clues">
         <h3>Dossier-aanwijzingen (PV Biethe)</h3>
         <ul>
             <li>De jongen die verantwoordelijk was voor de <strong>Mishandeling</strong> had via WhatsApp contact met Geke tot zondagavond.</li>
-            <li>Het misdrijf dat gepleegd werd vanwege het <strong>Achterstallige geld van €170,-</strong> is direct gelinkt aan het <strong>Dashcam-filmpje</strong>.</li>
+            <li>Het misdrijf dat gepleegd werd vanwege het <strong>Achterstallige geld (€170,-)</strong> is direct gelinkt aan het <strong>Dashcam-filmpje</strong>.</li>
             <li>Verdachte <strong>Anass</strong> is <em>niet</em> de jongen die de ruit vernielde met de <strong>Baksteen</strong>, en hij heeft niks te maken met het drugsmotief.</li>
             <li>Het delict waarbij getracht werd de meisjes in de <strong>Auto te trekken</strong>, werd ontdekt toen Frederika <strong>Vapes & Lange vloei</strong> vond op de kamer van Geke.</li>
             <li>Verdachte <strong>Brahim</strong> eiste de <strong>Achterstallige €170,-</strong> op, maar hij was <em>niet</em> degene die de meiden in de auto probeerde te sleuren.</li>
@@ -48,76 +54,151 @@
         </ul>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th></th>
-                <th class="col-header"><span>Auto-trekken</span></th>
-                <th class="col-header"><span>Mishandeling</span></th>
-                <th class="col-header"><span>Baksteen</span></th>
-                <th class="col-header"><span>Dashcam-film</span></th>
-                <th class="col-header"><span>Lachgasfles</span></th>
-                <th class="col-header"><span>Vapes & Vloei</span></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr data-rechercheur="Anass">
-                <td class="row-header">Anass</td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-            </tr>
-            <tr data-rechercheur="Brahim">
-                <td class="row-header">Brahim</td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-            </tr>
-            <tr data-rechercheur="Casper">
-                <td class="row-header">Casper</td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-                <td class="cell" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="grid-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th style="border:none; background:none;"></th>
+                    <th class="col-header"><span>Auto-trekken</span></th>
+                    <th class="col-header"><span>Mishandeling</span></th>
+                    <th class="col-header block-boundary"><span>Baksteen</span></th>
+                    <th class="col-header"><span>Achterstallig</span></th>
+                    <th class="col-header"><span>Drugsgebruik</span></th>
+                    <th class="col-header block-boundary"><span>Wapens-check</span></th>
+                    <th class="col-header"><span>Dashcam-film</span></th>
+                    <th class="col-header"><span>Lachgasfles</span></th>
+                    <th class="col-header"><span>Vapes & Vloei</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- RIJ 1: ANASS -->
+                <tr data-row="Anass">
+                    <td class="row-header">Anass</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                </tr>
+                <!-- RIJ 2: BRAHIM -->
+                <tr data-row="Brahim">
+                    <td class="row-header">Brahim</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                </tr>
+                <!-- RIJ 3: CASPER -->
+                <tr class="block-boundary" data-row="Casper">
+                    <td class="row-header">Casper</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="verdachten" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="verdachten" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Dashcam-film" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Lachgasfles" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Vapes & Vloei" data-rgroup="verdachten" data-cgroup="bewijs" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                </tr>
+                <!-- RIJ 4: DASHCAM -->
+                <tr data-row="Dashcam-film">
+                    <td class="row-header">Dashcam-film</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+                <!-- RIJ 5: LACHGASFLES -->
+                <tr data-row="Lachgasfles">
+                    <td class="row-header">Lachgasfles</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+                <!-- RIJ 6: VAPES & VLOEI -->
+                <tr class="block-boundary" data-row="Vapes & Vloei">
+                    <td class="row-header">Vapes & Vloei</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="bewijs" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Achterstallig" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Drugsgebruik" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Wapens-check" data-rgroup="bewijs" data-cgroup="motieven" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="3" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+                <!-- RIJ 7: ACHTERSTALLIG -->
+                <tr data-row="Achterstallig">
+                    <td class="row-header">Achterstallig</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+                <!-- RIJ 8: DRUGSGEBRUIK -->
+                <tr data-row="Drugsgebruik">
+                    <td class="row-header">Drugsgebruik</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+                <!-- RIJ 9: WAPENS-CHECK -->
+                <tr data-row="Wapens-check">
+                    <td class="row-header">Wapens-check</td>
+                    <td class="cell" data-col="Auto-trekken" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell" data-col="Mishandeling" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td class="cell block-boundary" data-col="Baksteen" data-rgroup="motieven" data-cgroup="delicten" onclick="cycleState(this)"><span class="clear-btn" onclick="clearCell(event, this)">x</span><span class="content"></span></td>
+                    <td colspan="6" style="background:#cbd5e0; border:none; cursor:default;"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
-    // De juiste combinaties op basis van de logica
+    // Sluitende controleoplossing (exact 18 juiste matches over de sub-grids)
     const solution = {
-        "Anass": ["Mishandeling", "Lachgasfles"],
-        "Brahim": ["Baksteen", "Dashcam-film"],
-        "Casper": ["Auto-trekken", "Vapes & Vloei"]
+        "Anass": ["Mishandeling", "Wapens-check", "Lachgasfles"],
+        "Brahim": ["Baksteen", "Achterstallig", "Dashcam-film"],
+        "Casper": ["Auto-trekken", "Drugsgebruik", "Vapes & Vloei"],
+        "Dashcam-film": ["Baksteen", "Achterstallig"],
+        "Lachgasfles": ["Mishandeling", "Wapens-check"],
+        "Vapes & Vloei": ["Auto-trekken", "Drugsgebruik"],
+        "Achterstallig": ["Baksteen"],
+        "Drugsgebruik": ["Auto-trekken"],
+        "Wapens-check": ["Mishandeling"]
     };
 
     function cycleState(cell) {
-        // Alleen doorklikken als de cel nog niet vergrendeld is door autoCross
-        if (cell.classList.contains('locked')) return;
-
         const contentSpan = cell.querySelector('.content');
         
+        // Staatwisseling: Leeg -> X -> V -> Leeg
         if (!cell.classList.contains('state-X') && !cell.classList.contains('state-V')) {
-            // Staat: Leeg -> Wordt X
             cell.classList.add('state-X');
             contentSpan.innerText = 'X';
         } else if (cell.classList.contains('state-X')) {
-            // Staat: X -> Wordt V
             cell.classList.remove('state-X');
             cell.classList.add('state-V');
             contentSpan.innerText = 'V';
-            autoCross(cell); // Kruis de rest van de opties direct af!
-        } else if (cell.classList.contains('state-V')) {
-            // Staat: V -> Wordt weer leeg
+            autoCross(cell); // Direct uitsluiten van overige opties!
+        } else {
             cell.classList.remove('state-V');
             contentSpan.innerText = '';
         }
@@ -125,70 +206,57 @@
     }
 
     function clearCell(event, btn) {
-        event.stopPropagation(); // Voorkom dat cycleState tegelijk triggert
+        event.stopPropagation(); // Voorkomt dat cycleState afvuurt
         const cell = btn.parentElement;
-        cell.className = 'cell'; // Reset alle classes behalve basissubstantiëring
+        cell.classList.remove('state-X', 'state-V');
         cell.querySelector('.content').innerText = '';
         checkWin();
     }
 
     function autoCross(vinkjeCell) {
-        const row = vinkjeCell.parentElement;
-        const colIndex = vinkjeCell.cellIndex;
-        const table = row.parentElement;
+        const rgroup = vinkjeCell.dataset.rgroup;
+        const cgroup = vinkjeCell.dataset.cgroup;
+        const rowName = vinkjeCell.parentElement.dataset.row;
+        const colName = vinkjeCell.dataset.col;
 
-        // Bepaal in welk 'blok' we zitten (0-2 zijn delicten, 3-5 is bewijsmateriaal)
-        const isDelictBlok = colIndex <= 3;
-        const startCol = isDelictBlok ? 1 : 4;
-        const endCol = isDelictBlok ? 3 : 6;
-
-        // 1. Kruis overige cellen in dezelfde RIJ af (binnen het juiste sub-blok)
-        for (let i = startCol; i <= endCol; i++) {
-            const currentCell = row.cells[i];
-            if (currentCell !== vinkjeCell && !currentCell.classList.contains('state-V')) {
-                currentCell.className = 'cell state-X locked';
-                currentCell.querySelector('.content').innerText = 'X';
-            }
-        }
-
-        // 2. Kruis overige cellen in dezelfde KOLOM af
-        const allRows = table.querySelectorAll('tr');
-        allRows.forEach(r => {
-            const currentCell = r.cells[colIndex];
-            if (currentCell && currentCell !== vinkjeCell && !currentCell.classList.contains('state-V')) {
-                currentCell.className = 'cell state-X locked';
-                currentCell.querySelector('.content').innerText = 'X';
+        const allCells = document.querySelectorAll('.cell');
+        allCells.forEach(c => {
+            // Check of de cel in dezelfde sub-matrix (groepcombinatie) valt
+            if (c !== vinkjeCell && c.dataset.rgroup === rgroup && c.dataset.cgroup === cgroup) {
+                // Als het in dezelfde rij óf dezelfde kolom zit, zet een X
+                if (c.parentElement.dataset.row === rowName || c.dataset.col === colName) {
+                    if (!c.classList.contains('state-V')) {
+                        c.classList.remove('state-X');
+                        c.classList.add('state-X');
+                        c.querySelector('.content').innerText = 'X';
+                    }
+                }
             }
         });
     }
 
     function checkWin() {
         let correctVinkjes = 0;
-        const rows = document.querySelectorAll('tbody tr');
+        let falseVinkjes = 0;
+        const allCells = document.querySelectorAll('.cell');
 
-        rows.forEach(row => {
-            const naam = row.getAttribute('data-rechercheur');
-            const targets = solution[naam];
+        allCells.forEach(cell => {
+            if (cell.classList.contains('state-V')) {
+                const rowName = cell.parentElement.dataset.row;
+                const colName = cell.dataset.col;
 
-            for (let i = 1; i < row.cells.length; i++) {
-                const cell = row.cells[i];
-                const headerText = document.querySelector(`thead th:nth-child(${i + 1}) span`).innerText;
-                
-                if (cell.classList.contains('state-V')) {
-                    if (targets.includes(headerText)) {
-                        correctVinkjes++;
-                    } else {
-                        // Fout vinkje gezet
-                        document.getElementById('win-msg').style.display = 'none';
-                        return;
-                    }
+                if (solution[rowName] && solution[rowName].includes(colName)) {
+                    correctVinkjes++;
+                } else {
+                    falseVinkjes++;
                 }
             }
         });
 
-        // Er moeten in totaal 6 juiste vinkjes staan (2 per verdachte)
-        if (correctVinkjes === 6) {
+        // In een 3x3 logigram met 3 subgrids zijn er exact 18 vinkjes nodig voor de winst
+        if (correctVinkjes === 18 && falseVinkjes === 0) {
             document.getElementById('win-msg').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
             document.getElementById('win-msg').style.display = 'none';
         }
